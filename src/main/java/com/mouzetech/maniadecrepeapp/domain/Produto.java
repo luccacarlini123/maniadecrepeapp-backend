@@ -1,6 +1,7 @@
 package com.mouzetech.maniadecrepeapp.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -26,7 +27,7 @@ public class Produto implements Serializable {
 	@JsonBackReference
 	@ManyToMany
 	@JoinTable(name="PRODUTO_CATEGORIA", joinColumns = @JoinColumn(name="produto_id"), inverseJoinColumns = @JoinColumn(name="categoria_id"))
-	private List<Categoria> categorias;
+	private List<Categoria> categorias = new ArrayList<>();
 	
 	public Produto() {
 	}
@@ -60,6 +61,14 @@ public class Produto implements Serializable {
 
 	public void setPreco(Double preco) {
 		this.preco = preco;
+	}
+
+	public List<Categoria> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
 	}
 
 	@Override
