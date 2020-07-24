@@ -1,5 +1,6 @@
 package com.mouzetech.maniadecrepeapp;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.mouzetech.maniadecrepeapp.domain.Cidade;
 import com.mouzetech.maniadecrepeapp.domain.Cliente;
 import com.mouzetech.maniadecrepeapp.domain.Endereco;
 import com.mouzetech.maniadecrepeapp.domain.Estado;
+import com.mouzetech.maniadecrepeapp.domain.Pagamento;
+import com.mouzetech.maniadecrepeapp.domain.PagamentoComBoleto;
+import com.mouzetech.maniadecrepeapp.domain.PagamentoComCartao;
+import com.mouzetech.maniadecrepeapp.domain.Pedido;
 import com.mouzetech.maniadecrepeapp.domain.Produto;
+import com.mouzetech.maniadecrepeapp.domain.enums.EstadoPagamento;
 import com.mouzetech.maniadecrepeapp.domain.enums.TipoCliente;
 import com.mouzetech.maniadecrepeapp.repositories.CategoriaRepository;
 import com.mouzetech.maniadecrepeapp.repositories.CidadeRepository;
 import com.mouzetech.maniadecrepeapp.repositories.ClienteRepository;
 import com.mouzetech.maniadecrepeapp.repositories.EnderecoRepository;
 import com.mouzetech.maniadecrepeapp.repositories.EstadoRepository;
+import com.mouzetech.maniadecrepeapp.repositories.PagamentoRepository;
+import com.mouzetech.maniadecrepeapp.repositories.PedidoRepository;
 import com.mouzetech.maniadecrepeapp.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -36,6 +44,10 @@ public class ManiadecrepeappBackendApplication implements CommandLineRunner {
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ManiadecrepeappBackendApplication.class, args);
@@ -83,6 +95,22 @@ public class ManiadecrepeappBackendApplication implements CommandLineRunner {
 
 		clienteRepository.saveAll(Arrays.asList(cli1));
 		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cli1, e2);
+
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"), null);
+		ped2.setPagamento(pagto2);
+
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 	}
 
 }
