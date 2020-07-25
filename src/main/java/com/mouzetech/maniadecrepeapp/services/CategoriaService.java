@@ -30,4 +30,9 @@ public class CategoriaService {
 	public List<Categoria> buscarTodos(){
 		return repo.findAll();
 	}
+	
+	public Categoria atualizar(Categoria obj) {
+		obj = repo.save(obj);
+		return obj;
+	}
 }
