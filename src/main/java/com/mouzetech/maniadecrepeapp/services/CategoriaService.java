@@ -1,5 +1,6 @@
 package com.mouzetech.maniadecrepeapp.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,4 +20,14 @@ public class CategoriaService {
 		Optional<Categoria> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Id "+id+" não encontrado. Tipo: "+Categoria.class+""));
 	}	
+	
+	public Categoria inserir(Categoria obj) {
+		obj.setId(null);
+		obj = repo.save(obj);
+		return obj;
+	}
+	
+	public List<Categoria> buscarTodos(){
+		return repo.findAll();
+	}
 }
