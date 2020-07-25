@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.mouzetech.maniadecrepeapp.domain.Categoria;
 import com.mouzetech.maniadecrepeapp.repositories.CategoriaRepository;
+import com.mouzetech.maniadecrepeapp.services.exception.DataIntegrityException;
 import com.mouzetech.maniadecrepeapp.services.exception.ObjectNotFoundException;
 
 @Service
@@ -34,5 +36,13 @@ public class CategoriaService {
 	public Categoria atualizar(Categoria obj) {
 		obj = repo.save(obj);
 		return obj;
+	}
+	
+	public void excluir(Integer id) {
+		try {
+		repo.deleteById(id);
+		}catch(DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível excluir uma Categoria que tenha Produtos associados");
+		}
 	}
 }
