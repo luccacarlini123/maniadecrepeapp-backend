@@ -2,6 +2,7 @@ package com.mouzetech.maniadecrepeapp.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.mouzetech.maniadecrepeapp.domain.Categoria;
+import com.mouzetech.maniadecrepeapp.dto.CategoriaDTO;
 import com.mouzetech.maniadecrepeapp.services.CategoriaService;
 
 @RestController
@@ -27,8 +29,10 @@ public class CategoriaResource {
 	private CategoriaService service;
 
 	@GetMapping
-	public List<Categoria> listar() {
-		return service.buscarTodos();
+	public ResponseEntity<List<CategoriaDTO>> listar() {
+		List<Categoria> lista = service.buscarTodos();
+		List<CategoriaDTO> listaDTO = lista.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listaDTO);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
