@@ -35,4 +35,8 @@ public class ProdutoService {
 		return produtoRepo.findDistinctByNomeContainingAndCategoriasIn(nome, categorias, pageRequest);
 	}
 	
+	public List<Produto> buscarPorCategoria(String nome){
+		return produtoRepo.buscarPorCategoria(nome);
+	}
+	
 }

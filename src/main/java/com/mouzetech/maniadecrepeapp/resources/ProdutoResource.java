@@ -1,6 +1,7 @@
 package com.mouzetech.maniadecrepeapp.resources;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,6 +43,13 @@ public class ProdutoResource {
 		List<Integer> ids = URL.decodeIntList(categorias);
 		Page<Produto> list = produtoService.search(nomeDecoded, ids, page, linesPerPage, orderBy, direction);
 		Page<ProdutoDTO> listDTO = list.map(obj -> new ProdutoDTO(obj));
+		return ResponseEntity.ok().body(listDTO);
+	}
+	
+	@GetMapping(value="/categoria")
+	public ResponseEntity<List<ProdutoDTO>> findByCategoria(@RequestParam(value="nome", defaultValue = "") String nome){
+		List<Produto> list = produtoService.buscarPorCategoria(nome);
+		List<ProdutoDTO> listDTO = list.stream().map(obj -> new ProdutoDTO(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDTO);
 	}
 

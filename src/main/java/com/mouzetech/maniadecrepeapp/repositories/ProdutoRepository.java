@@ -22,4 +22,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 	Page<Produto> findDistinctByNomeContainingAndCategoriasIn(@Param("nome") String nome, 
 			@Param("categorias") List<Categoria> categorias, Pageable pageRequest);
 	
+	@Query("SELECT obj FROM Produto obj INNER JOIN obj.categorias cat WHERE cat.nome = :nome")
+	List<Produto> buscarPorCategoria(@Param("nome") String nome);
+	
 }
