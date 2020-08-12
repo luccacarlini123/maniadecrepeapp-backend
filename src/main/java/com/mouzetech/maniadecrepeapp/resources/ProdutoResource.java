@@ -30,6 +30,13 @@ public class ProdutoResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	@GetMapping(value = "/all")
+	public ResponseEntity<List<ProdutoDTO>> findAll(){
+		List<Produto> list = produtoService.buscarTodos();
+		List<ProdutoDTO> listDTO = list.stream().map(obj -> new ProdutoDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
+	}
+	
 	@GetMapping
 	public ResponseEntity<Page<ProdutoDTO>> findPage(
 			@RequestParam(value="nome", defaultValue="") String nome, 

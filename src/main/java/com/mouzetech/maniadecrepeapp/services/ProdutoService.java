@@ -39,4 +39,9 @@ public class ProdutoService {
 		return produtoRepo.buscarPorCategoria(nome);
 	}
 	
+	public List<Produto> buscarTodos(){
+		List<Produto> list = produtoRepo.findAll();
+		return list;
+	}
+	
 }
