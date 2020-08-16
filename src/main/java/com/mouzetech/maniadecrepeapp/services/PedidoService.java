@@ -4,8 +4,12 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.mouzetech.maniadecrepeapp.domain.Cliente;
 import com.mouzetech.maniadecrepeapp.domain.ItemPedido;
 import com.mouzetech.maniadecrepeapp.domain.PagamentoComBoleto;
 import com.mouzetech.maniadecrepeapp.domain.Pedido;
@@ -13,6 +17,8 @@ import com.mouzetech.maniadecrepeapp.domain.enums.EstadoPagamento;
 import com.mouzetech.maniadecrepeapp.repositories.ItemPedidoRepository;
 import com.mouzetech.maniadecrepeapp.repositories.PagamentoRepository;
 import com.mouzetech.maniadecrepeapp.repositories.PedidoRepository;
+import com.mouzetech.maniadecrepeapp.security.UserSS;
+import com.mouzetech.maniadecrepeapp.services.exception.AuthorizationException;
 import com.mouzetech.maniadecrepeapp.services.exception.ObjectNotFoundException;
 
 @Service
@@ -62,4 +68,15 @@ public class PedidoService {
 		itemPedidoRepository.saveAll(obj.getItens());
 		return obj;
 	}
+	
+	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
+		UserSS user = UserService.authenticated();
+		if(user==null) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		Cliente cliente = clienteService.buscarPorId(user.getId());
+		return pedidoRepository.findByCliente(cliente, pageRequest);
+	}
+	
 }
