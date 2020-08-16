@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mouzetech.maniadecrepeapp.domain.Cidade;
 import com.mouzetech.maniadecrepeapp.domain.Cliente;
 import com.mouzetech.maniadecrepeapp.domain.Endereco;
+import com.mouzetech.maniadecrepeapp.domain.enums.Perfil;
 import com.mouzetech.maniadecrepeapp.domain.enums.TipoCliente;
 import com.mouzetech.maniadecrepeapp.dto.ClienteDTO;
 import com.mouzetech.maniadecrepeapp.dto.ClienteNewDTO;
 import com.mouzetech.maniadecrepeapp.repositories.ClienteRepository;
 import com.mouzetech.maniadecrepeapp.repositories.EnderecoRepository;
+import com.mouzetech.maniadecrepeapp.security.UserSS;
+import com.mouzetech.maniadecrepeapp.services.exception.AuthorizationException;
 import com.mouzetech.maniadecrepeapp.services.exception.DataIntegrityException;
 import com.mouzetech.maniadecrepeapp.services.exception.ObjectNotFoundException;
 
@@ -36,6 +39,13 @@ public class ClienteService {
 	private BCryptPasswordEncoder pe;
 	
 	public Cliente buscarPorId(Integer id) {
+		
+		UserSS user = UserService.authenticated();
+		
+		if(user==null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
 		Optional<Cliente> obj = clienteRepository.findById(id);
 		return obj.orElseThrow(() -> 
 		new ObjectNotFoundException("Objeto não encontrado! Id: "+id+". Tipo: "+Cliente.class));
