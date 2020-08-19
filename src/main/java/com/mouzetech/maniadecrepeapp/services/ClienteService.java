@@ -70,8 +70,8 @@ public class ClienteService {
 	}
 	
 	public Page<Cliente> buscarPagina(Integer page, Integer linesPerPage, String orderBy, String direction){
-		PageRequest pageReq = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		return clienteRepository.findAll(pageReq);
+			PageRequest pageReq = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+			return clienteRepository.findAll(pageReq);
 	}
 	
 	public void excluir(Integer id) {
