@@ -101,6 +101,10 @@ public class ClienteService {
 		return s3Client.uploadFile(file);
 	}
 	
+	public void deleteFile(String fileName) {
+		s3Client.deleteFile(fileName);
+	}
+	
 	public Cliente fromDTO(ClienteNewDTO obj) {
 		Cliente cli = new Cliente(null, obj.getNome(), obj.getEmail(), obj.getCpfOuCnpj(), TipoCliente.toEnum(obj.getTipo()), pe.encode(obj.getSenha()));
 		Cidade cid = new Cidade(obj.getCidadeId(), null, null);

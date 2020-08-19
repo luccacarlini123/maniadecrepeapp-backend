@@ -91,4 +91,9 @@ public class ClienteResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
+	@DeleteMapping(value="/picture")
+	public ResponseEntity<Void> deleteFile(@RequestParam("fileName") String fileName){
+		clienteService.deleteFile(fileName);
+		return ResponseEntity.noContent().build();
+	}	
 }
