@@ -1,5 +1,6 @@
 package com.mouzetech.maniadecrepeapp.services;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mouzetech.maniadecrepeapp.domain.Cidade;
 import com.mouzetech.maniadecrepeapp.domain.Cliente;
@@ -37,6 +39,9 @@ public class ClienteService {
 	
 	@Autowired
 	private BCryptPasswordEncoder pe;
+	
+	@Autowired
+	private S3Service s3Client;
 	
 	public Cliente buscarPorId(Integer id) {
 		
@@ -90,6 +95,10 @@ public class ClienteService {
 	
 	public Cliente fromDTO(ClienteDTO objDto) {
 		return new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null, null);
+	}
+	
+	public URI uploadFile(MultipartFile file) {
+		return s3Client.uploadFile(file);
 	}
 	
 	public Cliente fromDTO(ClienteNewDTO obj) {

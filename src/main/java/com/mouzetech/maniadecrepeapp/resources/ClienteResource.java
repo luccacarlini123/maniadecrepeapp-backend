@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.mouzetech.maniadecrepeapp.domain.Cliente;
@@ -84,6 +85,10 @@ public class ClienteResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	
+	@PostMapping(value="/picture")
+	public ResponseEntity<Void> uploadFile(@RequestParam("file") MultipartFile file){
+		URI uri = clienteService.uploadFile(file);
+		return ResponseEntity.created(uri).build();
+	}
 	
 }
