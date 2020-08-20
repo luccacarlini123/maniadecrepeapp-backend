@@ -12,7 +12,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 	@Transactional(readOnly=true)
 	Cliente findByEmail(String email);
 	
-	@Transactional
+	@Transactional(readOnly=true)
 	Cliente findByNome(String nome);
 	
 }

@@ -61,6 +61,12 @@ public class ClienteResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	@GetMapping(value="/email")
+	public ResponseEntity<Cliente> findByEmail(@RequestParam("email") String email){
+		Cliente obj = clienteService.buscarPorEmail(email);
+		return ResponseEntity.ok().body(obj);
+	}
+	
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PutMapping(value="/{id}")
 	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO objDto, @PathVariable Integer id){
