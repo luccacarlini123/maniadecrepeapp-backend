@@ -98,7 +98,15 @@ public class ClienteService {
 	}
 	
 	public URI uploadFile(MultipartFile file) {
-		return s3Client.uploadFile(file);
+		UserSS user = UserService.authenticated();
+		if(user==null) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		URI uri = s3Client.uploadFile(file);
+		Cliente cli = buscarPorId(user.getId());
+		cli.setImageUrl(uri.toString());
+		clienteRepository.save(cli);
+		return uri;
 	}
 	
 	public void deleteFile(String fileName) {
