@@ -42,6 +42,5 @@ public class ProdutoService {
 	public List<Produto> buscarTodos(){
 		List<Produto> list = produtoRepo.findAll();
 		return list;
-	}
-	
+	}	
 }

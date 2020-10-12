@@ -25,9 +25,8 @@ public class ProdutoResource {
 	private ProdutoService produtoService;
 	
 	@GetMapping(value="/{id}")
-	public ResponseEntity<Produto> findById(@PathVariable Integer id){
-		Produto obj = produtoService.buscarPorId(id);
-		return ResponseEntity.ok().body(obj);
+	public ResponseEntity<ProdutoDTO> findById(@PathVariable Integer id){
+		return ResponseEntity.ok().body(new ProdutoDTO(produtoService.buscarPorId(id)));
 	}
 	
 	@GetMapping(value = "/all")
